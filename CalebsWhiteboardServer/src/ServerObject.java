@@ -32,7 +32,7 @@ public class ServerObject implements Runnable {
 	}
 
 	private void loadAllEvents() {
-		for (int[] obj : intArrayArray) {
+		for (int[] socketInputObject : intArrayArray) {
 			//System.out.println("sending: " + num);
 			try {
 				Thread.sleep(10);
@@ -40,7 +40,7 @@ public class ServerObject implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			sendMessage(obj);
+			sendMessage(socketInputObject);
 		}
 		
 		sendMessage("eventsLoaded");
@@ -80,9 +80,9 @@ public class ServerObject implements Runnable {
 	}
 
 	// send message to client
-	private void sendMessage(Object obj) {
+	private void sendMessage(Object socketInputObject) {
 		try {
-			output.writeObject(obj);
+			output.writeObject(socketInputObject);
 			output.flush();
 		} catch (IOException ioException) {
 			System.out.println("\n error: can't send message");
@@ -94,11 +94,11 @@ public class ServerObject implements Runnable {
 		String message = "You are now connected";
 		System.out.println("Current devices connected: " + hosts.size());
 		showMessage(message);
-		Object obj = null;
+		Object socketInputObject = null;
 		do {
 			try {
-				obj = (Object) input.readObject();
-				int[] changedObj = (int[]) obj;
+				socketInputObject = (Object) input.readObject();
+				int[] changedObj = (int[]) socketInputObject;
 				intArrayArray.add(changedObj);
 				broadcastClient(changedObj);
 
@@ -109,7 +109,7 @@ public class ServerObject implements Runnable {
 			}
 			
 			try{
-				String command = (String) obj;
+				String command = (String) socketInputObject;
 				initiateCommand(command);
 			}catch(ClassCastException classCastException){
 			}
@@ -117,18 +117,18 @@ public class ServerObject implements Runnable {
 		} while (!message.equals("CLIENT - END"));
 	}
 
-	private void broadcastClient(Object obj) {
+	private void broadcastClient(Object socketInputObject) {
 		int[] intArray;
 		for (ServerObject bse : hosts) {
 			try {
-				intArray = (int[]) obj;
+				intArray = (int[]) socketInputObject;
 				intArray[5] = hosts.indexOf(bse) + 1;
-				obj = intArray;
+				socketInputObject = intArray;
 			} catch (ClassCastException e) {
 				System.out.println("class exception");
 			}
 			
-			bse.sendMessage(obj);
+			bse.sendMessage(socketInputObject);
 		}
 	}
 
