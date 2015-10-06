@@ -112,12 +112,12 @@ public class ServerObject implements Runnable {
 	}
 
 	private void broadcastClient(Object socketInputObject) {
-		int[] intArray;
+		DrawPath drawPath;
 		for (ServerObject bse : hosts) {
 			try {
-				intArray = (int[]) socketInputObject;
-				intArray[5] = hosts.indexOf(bse) + 1;
-				socketInputObject = intArray;
+				drawPath = (DrawPath) socketInputObject;
+				drawPath.clientID = hosts.indexOf(bse) + 1;
+				socketInputObject = drawPath;
 			} catch (ClassCastException e) {
 				System.out.println("class exception");
 			}
