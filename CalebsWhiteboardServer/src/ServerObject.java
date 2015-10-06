@@ -14,7 +14,7 @@ public class ServerObject implements Runnable {
 	ObjectInputStream input;
 	String hostName;
 	public static ArrayList<ServerObject> hosts;
-	public static ArrayList<int[]> intArrayArray;
+	public static ArrayList<DrawPath> drawPaths;
 
 	@Override
 	public void run() {
@@ -32,7 +32,7 @@ public class ServerObject implements Runnable {
 	}
 
 	private void loadAllEvents() {
-		for (int[] socketInputObject : intArrayArray) {
+		for (DrawPath socketInputObject : drawPaths) {
 			// System.out.println("sending: " + num);
 			try {
 				Thread.sleep(10);
@@ -98,8 +98,8 @@ public class ServerObject implements Runnable {
 		do {
 			try {
 				socketInputObject = (Object) input.readObject();
-				int[] changedObj = (int[]) socketInputObject;
-				intArrayArray.add(changedObj);
+				DrawPath changedObj = (DrawPath) socketInputObject;
+				drawPaths.add(changedObj);
 				broadcastClient(changedObj);
 
 			} catch (ClassNotFoundException classNotFoundException) {
@@ -136,13 +136,13 @@ public class ServerObject implements Runnable {
 		System.out.println(command);
 		switch (command) {
 		case "clearTheScreen":
-			intArrayArray = new ArrayList<int[]>();
+			drawPaths = new ArrayList<DrawPath>();
 			broadcastClient("clearScreen");
 			System.out.println("clearing board");
 			break;
 		case "reqData":
 			System.out.println("data has been requested");
-			System.out.println("intArray size: " + intArrayArray.size());
+			System.out.println("intArray size: " + drawPaths.size());
 			loadAllEvents();
 			break;
 		}

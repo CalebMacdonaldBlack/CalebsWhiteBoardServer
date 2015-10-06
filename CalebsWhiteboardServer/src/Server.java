@@ -8,7 +8,7 @@ public class Server {
 	 */
 	public static void main(String[] args) {
 		ServerObject.hosts = new ArrayList<ServerObject>();
-		ServerObject.intArrayArray = new ArrayList<int[]>();
+		ServerObject.drawPaths = new ArrayList<DrawPath>();
 		ServerObject bse = new ServerObject(null, null, null);
 		bse.startRunning();
 
