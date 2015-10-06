@@ -64,7 +64,7 @@ public class ServerObject implements Runnable {
 
 	// close streams and sockets after you are done chatting
 	private void closeCrap() {
-		showMessage("\n closing connections... \n");
+		System.out.println("\n closing connections... \n");
 		try {
 			output.close();
 			input.close();
@@ -72,11 +72,6 @@ public class ServerObject implements Runnable {
 		} catch (IOException ioException) {
 			ioException.printStackTrace();
 		}
-	}
-
-	// display message
-	private void showMessage(String string) {
-		System.out.println(string);
 	}
 
 	// send message to client
@@ -154,19 +149,19 @@ public class ServerObject implements Runnable {
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
 		// output.writeObject(new int[] {-1,0,0,0,0,hosts.indexOf(this)});
-		showMessage("Streams are now setup");
+		System.out.println("Streams are now setup");
 	}
 
 	// wait for connection then display connection iformation
 	private void waitForConnection() throws IOException {
-		showMessage("waiting for connection...\n");
+		System.out.println("waiting for connection...\n");
 		connection = server.accept();
 
 		if (!isDupe(connection.getInetAddress().getHostName())) {
 			ServerObject bse = new ServerObject(this.connection, this.server,
 					connection.getInetAddress().getHostName());
 			hosts.add(bse);
-			showMessage(" Now connected to " + connection.getInetAddress().getHostName());
+			System.out.println(" Now connected to " + connection.getInetAddress().getHostName());
 			Thread thread = new Thread(bse);
 			thread.start();
 		}
