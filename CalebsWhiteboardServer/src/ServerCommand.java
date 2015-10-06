@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class ServerCommand extends Packet{
+public class ServerCommand extends Packet implements Serializable{
 
 	private String commandText;
 
@@ -7,13 +8,9 @@ public class ServerCommand extends Packet{
 		this.commandText = commandText;
 	}
 	
-	public ServerCommand getCommand(){
-		return this;
-		
-	}
-	
-	public String toString(){
+	public String getCommand(){
 		return commandText;
+		
 	}
 
 }

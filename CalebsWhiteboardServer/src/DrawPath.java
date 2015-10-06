@@ -1,6 +1,11 @@
+import java.io.Serializable;
 
-public class DrawPath extends Packet{
+public class DrawPath extends Packet implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int oldX, oldY, currentX, currentY, brushWidth, clientID;
 	String color;
 	

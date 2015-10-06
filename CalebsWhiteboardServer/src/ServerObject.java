@@ -92,20 +92,15 @@ public class ServerObject implements Runnable {
 		do {
 			try {
 				socketInputObject = (Object) input.readObject();
-				Packet changedObj = (Packet) socketInputObject;
-				
-				//send out the path if instance of drawpath
-				if (changedObj instanceof DrawPath) {
-					drawPaths.add((DrawPath) changedObj);
-					broadcastClient(changedObj);
-				}
+				Packet packet = (Packet) socketInputObject;
+				objectInputIdentify(packet);
 
 			} catch (ClassNotFoundException classNotFoundException) {
 				System.out.println("Error: input not an object");
 			} catch (ClassCastException classCastException) {
-				System.out.println("obj is not an int array");
+				System.out.println("obj is not a Packet object");
 			}
-
+			
 			try {
 				String command = (String) socketInputObject;
 				initiateCommand(command);
@@ -113,6 +108,20 @@ public class ServerObject implements Runnable {
 			}
 
 		} while (true);
+	}
+
+	private void objectInputIdentify(Packet packet) {
+		
+		//send out the path if instance of drawpath
+		if (packet instanceof DrawPath) {
+			drawPaths.add((DrawPath) packet);
+			broadcastClient(packet);
+		} else if(packet instanceof ServerCommand){
+			ServerCommand serverCommand = (ServerCommand) packet;
+			String commandText = serverCommand.getCommand();
+			initiateCommand(commandText);
+		}
+		
 	}
 
 	private void broadcastClient(Object socketInputObject) {
@@ -138,10 +147,8 @@ public class ServerObject implements Runnable {
 			broadcastClient("clearScreen");
 			System.out.println("clearing board");
 			break;
-		case "reqData":
+		case "req":
 			System.out.println("data has been requested");
-			System.out.println("intArray size: " + drawPaths.size());
-			loadAllEvents();
 			break;
 		}
 

@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Packet {
+public class Packet implements Serializable{
 	String packetID;
 
 	public Packet() {
@@ -9,7 +10,7 @@ public class Packet {
 		return null;
 	}
 	
-	public ServerCommand getCommand(){
+	public String getCommand(){
 		return null;
 	}
 }
