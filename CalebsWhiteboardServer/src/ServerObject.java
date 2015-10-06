@@ -33,7 +33,7 @@ public class ServerObject implements Runnable {
 
 	private void loadAllEvents() {
 		for (int[] socketInputObject : intArrayArray) {
-			//System.out.println("sending: " + num);
+			// System.out.println("sending: " + num);
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -42,7 +42,7 @@ public class ServerObject implements Runnable {
 			}
 			sendMessage(socketInputObject);
 		}
-		
+
 		sendMessage("eventsLoaded");
 	}
 
@@ -107,11 +107,11 @@ public class ServerObject implements Runnable {
 			} catch (ClassCastException classCastException) {
 				System.out.println("obj is not an int array");
 			}
-			
-			try{
+
+			try {
 				String command = (String) socketInputObject;
 				initiateCommand(command);
-			}catch(ClassCastException classCastException){
+			} catch (ClassCastException classCastException) {
 			}
 
 		} while (!message.equals("CLIENT - END"));
@@ -127,7 +127,7 @@ public class ServerObject implements Runnable {
 			} catch (ClassCastException e) {
 				System.out.println("class exception");
 			}
-			
+
 			bse.sendMessage(socketInputObject);
 		}
 	}
@@ -135,7 +135,7 @@ public class ServerObject implements Runnable {
 	private void initiateCommand(String command) {
 		System.out.println(command);
 		switch (command) {
-		case "clearTheScreen": 
+		case "clearTheScreen":
 			intArrayArray = new ArrayList<int[]>();
 			broadcastClient("clearScreen");
 			System.out.println("clearing board");
@@ -154,7 +154,7 @@ public class ServerObject implements Runnable {
 		output = new ObjectOutputStream(connection.getOutputStream());
 		output.flush();
 		input = new ObjectInputStream(connection.getInputStream());
-		//output.writeObject(new int[] {-1,0,0,0,0,hosts.indexOf(this)});
+		// output.writeObject(new int[] {-1,0,0,0,0,hosts.indexOf(this)});
 		showMessage("Streams are now setup");
 	}
 
