@@ -91,9 +91,8 @@ public class ServerObject implements Runnable {
 
 	// during the chat conversation
 	private void whileReceiving() throws IOException {
-		String message = "You are now connected";
+		System.out.println("You are now connected");
 		System.out.println("Current devices connected: " + hosts.size());
-		showMessage(message);
 		Object socketInputObject = null;
 		do {
 			try {
@@ -114,7 +113,7 @@ public class ServerObject implements Runnable {
 			} catch (ClassCastException classCastException) {
 			}
 
-		} while (!message.equals("CLIENT - END"));
+		} while (true);
 	}
 
 	private void broadcastClient(Object socketInputObject) {
