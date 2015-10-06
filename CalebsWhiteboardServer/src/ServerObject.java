@@ -32,7 +32,7 @@ public class ServerObject implements Runnable {
 	}
 
 	private void loadAllEvents() {
-		for (DrawPath socketInputObject : drawPaths) {
+		for (Packet socketInputObject : drawPaths) {
 			// System.out.println("sending: " + num);
 			try {
 				Thread.sleep(10);
@@ -92,9 +92,13 @@ public class ServerObject implements Runnable {
 		do {
 			try {
 				socketInputObject = (Object) input.readObject();
-				DrawPath changedObj = (DrawPath) socketInputObject;
-				drawPaths.add(changedObj);
-				broadcastClient(changedObj);
+				Packet changedObj = (Packet) socketInputObject;
+				
+				//send out the path if instance of drawpath
+				if (changedObj instanceof DrawPath) {
+					drawPaths.add((DrawPath) changedObj);
+					broadcastClient(changedObj);
+				}
 
 			} catch (ClassNotFoundException classNotFoundException) {
 				System.out.println("Error: input not an object");
