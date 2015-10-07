@@ -100,7 +100,7 @@ public class ServerObject implements Runnable {
 			} catch (ClassCastException classCastException) {
 				System.out.println("obj is not a Packet object");
 			}
-			
+
 			try {
 				String command = (String) socketInputObject;
 				initiateCommand(command);
@@ -111,23 +111,29 @@ public class ServerObject implements Runnable {
 	}
 
 	private void objectInputIdentify(Packet packet) {
-		
-		//send out the path if instance of drawpath
+
+		// send out the path if instance of drawpath
 		if (packet instanceof DrawPath) {
 			drawPaths.add((DrawPath) packet);
 			broadcastClient(packet);
-		} else if(packet instanceof ServerCommand){
+		} else if (packet instanceof ServerCommand) {
 			ServerCommand serverCommand = (ServerCommand) packet;
 			String commandText = serverCommand.getCommand();
 			initiateCommand(commandText);
 		}
-		
+
 	}
 
 	private void broadcastClient(Object socketInputObject) {
 		DrawPath drawPath;
 		for (ServerObject bse : hosts) {
 			try {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				drawPath = (DrawPath) socketInputObject;
 				drawPath.clientID = hosts.indexOf(bse) + 1;
 				socketInputObject = drawPath;

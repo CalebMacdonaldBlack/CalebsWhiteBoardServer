@@ -7,17 +7,17 @@ public class DrawPath extends Packet implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	int oldX, oldY, currentX, currentY, brushWidth, clientID;
-	String color;
+	String mouseAction;
 	
 	public DrawPath(int oldX, int oldY, int currentX, int currentY, int brushWidth, int clientID,
-			String color) {
+			String mouseAction) {
 		this.oldX = oldX;
 		this.oldY = oldY;
 		this.currentX = currentX;
 		this.currentY = currentY;
 		this.brushWidth = brushWidth;
 		this.clientID = clientID;
-		this.color = color;
+		this.mouseAction = mouseAction;
 	}
 
 	@Override
