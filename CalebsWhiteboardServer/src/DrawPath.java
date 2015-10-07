@@ -9,8 +9,8 @@ public class DrawPath extends Packet implements Serializable{
 	int oldX, oldY, currentX, currentY, brushWidth, clientID;
 	String color;
 	
-	public DrawPath(String packetID, int oldX, int oldY, int currentX, int currentY, int brushWidth, int clientID,
-			String color, String packetID2) {
+	public DrawPath(int oldX, int oldY, int currentX, int currentY, int brushWidth, int clientID,
+			String color) {
 		this.oldX = oldX;
 		this.oldY = oldY;
 		this.currentX = currentX;
@@ -18,7 +18,6 @@ public class DrawPath extends Packet implements Serializable{
 		this.brushWidth = brushWidth;
 		this.clientID = clientID;
 		this.color = color;
-		packetID = packetID2;
 	}
 
 	@Override
