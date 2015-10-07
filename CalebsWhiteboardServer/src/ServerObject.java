@@ -21,7 +21,7 @@ public class ServerObject implements Runnable {
 
 		try {
 			setupStreams();
-			loadAllEvents();
+			initializeConnection();
 			whileReceiving();
 		} catch (IOException e) {
 			System.out.println("Disconnected with " + this.hostName);
@@ -31,19 +31,22 @@ public class ServerObject implements Runnable {
 
 	}
 
-	private void loadAllEvents() {
+	private void initializeConnection() {
+		
+		Packet assignID = new AssignID(hosts.indexOf(this) + 1);
+		
+		outputData(assignID);
+		
 		for (Packet socketInputObject : drawPaths) {
 			// System.out.println("sending: " + num);
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			sendMessage(socketInputObject);
+			outputData(socketInputObject);
 		}
-
-		sendMessage("eventsLoaded");
 	}
 
 	public void startRunning() {
@@ -75,7 +78,7 @@ public class ServerObject implements Runnable {
 	}
 
 	// send message to client
-	private void sendMessage(Object socketInputObject) {
+	private void outputData(Object socketInputObject) {
 		try {
 			output.writeObject(socketInputObject);
 			output.flush();
@@ -129,7 +132,7 @@ public class ServerObject implements Runnable {
 		for (ServerObject bse : hosts) {
 			try {
 				try {
-					Thread.sleep(10);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -141,7 +144,7 @@ public class ServerObject implements Runnable {
 				System.out.println("class exception");
 			}
 
-			bse.sendMessage(socketInputObject);
+			bse.outputData(socketInputObject);
 		}
 	}
 
