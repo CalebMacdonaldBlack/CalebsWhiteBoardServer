@@ -104,15 +104,10 @@ public class ServerObject implements Runnable {
 				System.out.println("obj is not a Packet object");
 			}
 
-			try {
-				String command = (String) socketInputObject;
-				initiateCommand(command);
-			} catch (ClassCastException classCastException) {
-			}
-
 		} while (true);
 	}
 
+	//this method finds out what to do with the packet class recieved from the client.
 	private void objectInputIdentify(Packet packet) {
 
 		// send out the path if instance of drawpath
@@ -151,9 +146,9 @@ public class ServerObject implements Runnable {
 	private void initiateCommand(String command) {
 		System.out.println(command);
 		switch (command) {
-		case "clearTheScreen":
+		case "clear":
 			drawPaths = new ArrayList<DrawPath>();
-			broadcastClient("clearScreen");
+			broadcastClient("clear");
 			System.out.println("clearing board");
 			break;
 		case "req":
