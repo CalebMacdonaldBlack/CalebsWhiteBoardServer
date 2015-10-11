@@ -32,11 +32,11 @@ public class ServerObject implements Runnable {
 	}
 
 	private void initializeConnection() {
-		
+
 		Packet assignID = new AssignID(hosts.indexOf(this) + 1);
-		
+
 		outputData(assignID);
-		
+
 		for (Packet socketInputObject : drawPaths) {
 			// System.out.println("sending: " + num);
 			try {
@@ -47,6 +47,9 @@ public class ServerObject implements Runnable {
 			}
 			outputData(socketInputObject);
 		}
+
+		// let client know we have finished loading and user can now draw
+		outputData(new ServerCommand("finishedLoading"));
 	}
 
 	public void startRunning() {
@@ -66,6 +69,7 @@ public class ServerObject implements Runnable {
 	}
 
 	// close streams and sockets after you are done chatting
+	@SuppressWarnings("unused")
 	private void closeCrap() {
 		System.out.println("\n closing connections... \n");
 		try {
@@ -107,11 +111,14 @@ public class ServerObject implements Runnable {
 		} while (true);
 	}
 
-	//this method finds out what to do with the packet class recieved from the client.
+	// this method finds out what to do with the packet class recieved from the
+	// client.
 	private void objectInputIdentify(Packet packet) {
 
 		// send out the path if instance of drawpath
 		if (packet instanceof DrawPath) {
+			DrawPath drawPath = (DrawPath) packet;
+			drawPath.clientID = hosts.indexOf(this) + 1;
 			drawPaths.add((DrawPath) packet);
 			broadcastClient(packet);
 		} else if (packet instanceof ServerCommand) {
@@ -123,23 +130,16 @@ public class ServerObject implements Runnable {
 	}
 
 	private void broadcastClient(Object socketInputObject) {
-		DrawPath drawPath;
 		for (ServerObject bse : hosts) {
 			try {
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				drawPath = (DrawPath) socketInputObject;
-				drawPath.clientID = hosts.indexOf(bse) + 1;
-				socketInputObject = drawPath;
-			} catch (ClassCastException e) {
-				System.out.println("class exception");
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-			bse.outputData(socketInputObject);
+			if (this != bse)
+				bse.outputData(socketInputObject);
 		}
 	}
 
@@ -148,7 +148,7 @@ public class ServerObject implements Runnable {
 		switch (command) {
 		case "clear":
 			drawPaths = new ArrayList<DrawPath>();
-			broadcastClient("clear");
+			broadcastClient(new ServerCommand("clear"));
 			System.out.println("clearing board");
 			break;
 		case "req":
